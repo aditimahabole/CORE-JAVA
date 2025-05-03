@@ -100,6 +100,77 @@ public class Logger {
 * Only the **first thread** locks and creates the instance.
 * Others just **read** it without waiting!
 
+Let’s break down this line:
+
+```java
+synchronized (Logger.class)
+```
+
+### ✅ What does this mean?
+
+It means:
+
+> Lock the **`Logger` class object**, so that **only one thread** can execute the code inside the synchronized block **at a time**.
+
+---
+
+### 🔍 Let's Understand Step-by-Step
+
+#### 1. **`synchronized` block**
+
+```java
+synchronized (someObject) {
+    // critical section
+}
+```
+
+This tells Java:
+
+* "Before entering this block, **get a lock** on `someObject`."
+* "If another thread has already locked it, **wait** until it is released."
+* "Once inside, **no other thread** can enter any other block locked on the **same object**."
+
+---
+
+#### 2. **What is `Logger.class`?**
+
+* In Java, every class (like `Logger`) has a **Class object** associated with it.
+* `Logger.class` is a **reference to that Class object**.
+* So, `synchronized (Logger.class)` means:
+
+  * Lock the **class-level lock**, **not object-level**.
+
+---
+
+### ✅ Why are we locking on `Logger.class`?
+
+Because:
+
+* The `instance` variable is **static** (belongs to the class, not any object)
+* So, we lock the **class itself** (`Logger.class`) to make sure **only one thread** can create the instance
+
+---
+
+### 🧠 What if we used `this` instead of `Logger.class`?
+
+You **cannot** use `this` in a static method because `this` refers to an object, and static methods **don’t belong to any object**.
+
+---
+
+### ✅ Final Recap
+
+```java
+synchronized (Logger.class)
+```
+
+Means:
+
+* Lock the `Logger` **class-level monitor**
+* Only one thread can enter that block at a time
+* It ensures that **instance is created only once**, even in multithreaded access
+
+
+
 ---
 
 ## ✅ Summary

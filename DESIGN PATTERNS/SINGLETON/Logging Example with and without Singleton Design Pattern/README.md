@@ -126,6 +126,7 @@ public class Main {
 }
 ```
 
+
 ### ✅ Output
 
 * Only **one FileWriter** is used.
@@ -133,4 +134,73 @@ public class Main {
 * Clean, ordered log entries.
 
 ---
+
+
+
+### ❓ Does "Multiple FileWriters" mean **many `log.txt` files**?
+
+**No**, it usually **does NOT mean multiple log files** like `log1.txt`, `log2.txt`, etc.
+
+---
+
+### ✅ What "Multiple FileWriters" Really Means:
+
+It means:
+
+* **Multiple `FileWriter` objects** trying to write to **the *same* log file** (e.g., `log.txt`) **at the same time**.
+* Each `FileWriter` opens its own **file stream**, which can cause:
+
+  * 💥 **File lock conflicts**
+  * 🔄 **Data corruption / partial writes**
+  * 🚫 **Lost log entries**
+  * 🌀 **Out-of-order logs**
+
+---
+
+### ❌ Problem Example Without Singleton:
+
+If you do:
+
+```java
+Logger logger1 = new Logger();
+Logger logger2 = new Logger();
+```
+
+Each logger might internally use its own `FileWriter`. Now both loggers write to `log.txt`, but:
+
+* They **don't coordinate**
+* One might write halfway and get interrupted by the other
+* The log could end up **corrupt or inconsistent**
+
+---
+
+### ✅ Solution Using Singleton Pattern:
+
+You ensure **only one instance** of `Logger`, which has **only one `FileWriter`**, shared by the entire application.
+
+```java
+Logger logger = Logger.getInstance();
+logger.log("Some message");
+```
+
+✔ This ensures:
+
+* Only one `FileWriter`
+* One stream to the file
+* Proper ordering and integrity of logs
+
+---
+
+### ✅ Summary:
+
+| Term                 | Meaning                                                 |
+| -------------------- | ------------------------------------------------------- |
+| Multiple FileWriters | Multiple instances writing to the same file (`log.txt`) |
+| Multiple log files   | Different file names like `log1.txt`, `log2.txt`        |
+
+In this case, "multiple FileWriters" **does NOT mean multiple log files** – it means **multiple streams to the same file**, which is dangerous.
+
+---
+
+
 

@@ -1,4 +1,4 @@
-###☕ What is the Singleton Pattern?
+### ☕ What is the Singleton Pattern?
 
 + The Singleton Pattern ensures that only one object (instance) of a class is ever created — and that this one object is shared globally across your application.
 

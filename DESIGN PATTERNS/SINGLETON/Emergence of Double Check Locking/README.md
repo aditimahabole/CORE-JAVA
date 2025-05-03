@@ -169,6 +169,67 @@ Means:
 * Only one thread can enter that block at a time
 * It ensures that **instance is created only once**, even in multithreaded access
 
+Let me explain clearly what I meant when I said:
+
+> "Every class in Java has a **Class object** associated with it."
+
+---
+
+### ✅ What is a `Class` object in Java?
+
+In Java, **everything is an object** — even **classes themselves** are represented as objects of type `java.lang.Class`.
+
+#### Example:
+
+```java
+Logger.class
+```
+
+This returns an object of type `Class<Logger>`, which **represents the `Logger` class itself** in memory.
+
+---
+
+### ✅ When is the `Class` object created?
+
+When you first **load** a class (like `Logger`) into memory (e.g., the first time you use `Logger` in your code), the Java Virtual Machine (JVM) automatically creates a **`Class` object** for it.
+
+* This object holds **metadata** about the class: its name, methods, fields, etc.
+* It is **shared** across the entire application.
+* There is **only one `Class` object** per loaded class.
+
+---
+
+### ✅ Why is this useful?
+
+You can use it to:
+
+* Lock the class itself (like `synchronized(Logger.class)`)
+* Use **reflection** to inspect the class at runtime
+* Get the class name, methods, fields, etc.
+
+---
+
+### ✅ Small Example:
+
+```java
+Class<?> c = Logger.class;
+System.out.println(c.getName());   // Output: Logger
+```
+
+Here, `Logger.class` gives you the **Class object** that describes the Logger class.
+
+---
+
+### ✅ Summary:
+
+| Concept        | Description                                          |
+| -------------- | ---------------------------------------------------- |
+| `Logger.class` | A reference to the `Class` object for `Logger`       |
+| Class object   | Created by JVM when the class is loaded              |
+| Purpose        | Lets you access class metadata or use it for locking |
+
+---
+
 
 
 ---
